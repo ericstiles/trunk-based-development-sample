@@ -15,11 +15,11 @@ jobs:
       with:
         fetch-depth: 0
     
-    - name: Set up JDK 17
+    - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
-        distribution: 'temurin'
+        java-version: '21'
+        distribution: 'adopt'
         cache: maven
 
     - name: Build with Maven
@@ -37,18 +37,54 @@ jobs:
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       id: version
       # Uses the following patterns to determine the next version:
-      # Major: 'BREAKING CHANGE:' - Triggers major version increment (X.0.0)
-      # Minor: 'feat:' - Triggers minor version increment (0.X.0)
-      # Patch: 'fix:' - Triggers patch version increment (0.0.X)
-      #
-      # Note: Other conventional commit types (docs, style, refactor, test, chore, perf)
-      # will not trigger version changes but are still validated by commitlint
+      # Major: 'BREAKING CHANGE:'
+      # Minor: 'feat:'
+      # Patch: 'fix:'
+      # This action uses the current commit hash as the identifier
+      # for the previous version, which is stored in the
+      # `github.sha` context.
       uses: paulhatch/semantic-version@v5.0.2
       with:
+        # The prefix to use to identify tags
         tag_prefix: "v"
+        # A string which, if present in a git commit, indicates that a change represents a
+        # major (breaking) change, supports regular expressions wrapped with '/'
         major_pattern: "BREAKING CHANGE:"
+        # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
         minor_pattern: "feat:"
         patch_pattern: "fix:"
+        
+        # A string to determine the format of the version output
+        #version_format: "${major}.${minor}.${patch}-prerelease${increment}"
+         
+        # Optional path to check for changes. If any changes are detected in the path the
+        # 'changed' output will true. Enter multiple paths separated by spaces.
+        #change_path: "src/my-service"
+        
+        # Named version, will be used as suffix for name version tag
+        #namespace: my-service
+        
+        # If this is set to true, *every* commit will be treated as a new version.
+        bump_each_commit: false
+        
+        # If bump_each_commit is also set to true, setting this value will cause the version to increment only if the pattern specified is matched.
+        bump_each_commit_patch_pattern: ""
+        
+        # If true, the body of commits will also be searched for major/minor patterns to determine the version type.
+        #search_commit_body: false
+        
+        # The output method used to generate list of users, 'csv' or 'json'.
+        #user_format_type: "csv"
+        
+        # Prevents pre-v1.0.0 version from automatically incrementing the major version.
+        # If enabled, when the major version is 0, major releases will be treated as minor and minor as patch. Note that the version_type output is unchanged.
+        #enable_prerelease_mode: true
+        
+        # If enabled, diagnostic information will be added to the action output.
+        debug: true
+        
+        # If true, the branch will be used to select the maximum version.
+        #version_from_branch: false        
 
     - name: Echo Version Info
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
