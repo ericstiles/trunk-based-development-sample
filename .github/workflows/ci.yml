@@ -23,10 +23,15 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: |
+        mvn -B package --file pom.xml
+        echo "✅ Build with Maven completed successfully"
 
     - name: Conventional Commit Validation
       uses: wagoid/commitlint-github-action@v5
+
+    - name: Echo Commit Validation Status
+      run: echo "✅ Conventional Commit Validation passed"
 
     - name: Semantic Version
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -38,6 +43,15 @@ jobs:
         minor_pattern: "feat:"
         patch_pattern: "fix:"
 
+    - name: Echo Version Info
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        echo "✅ Semantic Version step completed"
+        echo "Version: v${{ steps.version.outputs.version }}"
+        echo "Major: ${{ steps.version.outputs.major }}"
+        echo "Minor: ${{ steps.version.outputs.minor }}"
+        echo "Patch: ${{ steps.version.outputs.patch }}"
+
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/create-release@v1
@@ -48,3 +62,10 @@ jobs:
         release_name: Release v${{ steps.version.outputs.version }}
         draft: false
         prerelease: false
+
+    - name: Echo Release Status
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        echo "✅ Release created successfully"
+        echo "Tag: v${{ steps.version.outputs.version }}"
+        echo "Release Name: Release v${{ steps.version.outputs.version }}"
