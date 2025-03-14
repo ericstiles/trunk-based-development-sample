@@ -37,12 +37,12 @@ jobs:
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       id: version
       # Uses the following patterns to determine the next version:
-      # Major: 'BREAKING CHANGE:'
-      # Minor: 'feat:'
-      # Patch: 'fix:'
-      # This action uses the current commit hash as the identifier
-      # for the previous version, which is stored in the
-      # `github.sha` context.
+      # Major: 'BREAKING CHANGE:' - Triggers major version increment (X.0.0)
+      # Minor: 'feat:' - Triggers minor version increment (0.X.0)
+      # Patch: 'fix:' - Triggers patch version increment (0.0.X)
+      #
+      # Note: Other conventional commit types (docs, style, refactor, test, chore, perf)
+      # will not trigger version changes but are still validated by commitlint
       uses: paulhatch/semantic-version@v5.0.2
       with:
         tag_prefix: "v"
