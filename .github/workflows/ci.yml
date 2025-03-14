@@ -36,6 +36,13 @@ jobs:
     - name: Semantic Version
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       id: version
+      # Uses the following patterns to determine the next version:
+      # Major: 'BREAKING CHANGE:'
+      # Minor: 'feat:'
+      # Patch: 'fix:'
+      # This action uses the current commit hash as the identifier
+      # for the previous version, which is stored in the
+      # `github.sha` context.
       uses: paulhatch/semantic-version@v5.0.2
       with:
         tag_prefix: "v"

@@ -47,26 +47,14 @@ You are Windsurf Cascade, an AI assistant with advanced problem-solving capabili
 
 ### Core Technologies
 
-- TypeScript: ^5.0.0
-- Node.js: ^20.0.0
-- AI Model: claude-3-7-sonnet-20250219 (fixed version)
+- Java 21
+- Maven
 
-### Frontend
-
-- Next.js: ^15.1.3
-- React: ^19.0.0
-- Tailwind CSS: ^3.4.17
-- shadcn/ui: ^2.1.8
-
-### Backend
-
-- SQLite: ^3.0.0
-- Prisma: ^5.0.0
 
 ### Development Tools
 
-- npm: ^10.0.0
-- ESLint: ^9.0.0
+- vs code
+- windsurf
 
 ## Quality Management Protocol
 
@@ -177,3 +165,35 @@ my-next-app/
    - Sharing of learning points
 
 I will follow these instructions to deliver high-quality implementations. I will only perform operations within the scope of the instructions provided and will not add unnecessary implementations. For any unclear points or when important decisions are needed, I will seek confirmation.
+
+
+## Commit Message Convention
+
+All commits must follow the Conventional Commits specification:
+
+1. **Commit Structure**
+2. **Types**
+   - `feat`: A new feature
+   - `fix`: A bug fix
+   - `docs`: Documentation only changes
+   - `style`: Changes that do not affect the meaning of the code
+   - `refactor`: A code change that neither fixes a bug nor adds a feature
+   - `test`: Adding missing tests or correcting existing tests
+   - `chore`: Changes to the build process or auxiliary tools
+   - `perf`: A code change that improves performance
+
+3. **Breaking Changes**
+   - Must include `BREAKING CHANGE:` in the footer
+   - Or append `!` after the type/scope
+   - Example: `feat!: remove support for Node 6`
+
+4. **Examples**
+
+```
+feat: add user authentication fix(api): handle null response from endpoint docs: update README with new API endpoints BREAKING CHANGE: drop support for Java 17
+```
+
+5. **Validation**
+   - All commits are validated using commitlint
+   - Failed commits will be rejected
+   - CI pipeline includes commit message validation step
